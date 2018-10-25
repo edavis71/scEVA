@@ -13,7 +13,6 @@ library(dplyr)
 library(magrittr)
 library(ggrepel)
 library(Rtsne)
-setwd("/Users/emilydavis/phd/rotations/fertig/hnscc")
 
 ###################################################
 ### code chunk: overview fig matrix

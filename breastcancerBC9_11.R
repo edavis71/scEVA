@@ -11,7 +11,6 @@ library(GSReg)
 library(reshape2)
 library(ComplexHeatmap)
 library(limma)
-setwd("/Users/emilydavis/Desktop/breast_cancer/results")
 
 # load data and pathways
 load("breast_cancer_imputed_cdsBC9_11.rda")

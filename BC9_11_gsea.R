@@ -14,8 +14,6 @@ library(gridExtra)
 library(Vennerable)
 library(dplyr)
 library(gplots)
-setwd("/Users/emilydavis/Desktop/breast_cancer")
-setwd("/Users/emilydavis/Desktop/breast_cancer/results")
 
 ###################################################
 ### code chunk 2: Create cell data set

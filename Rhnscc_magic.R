@@ -14,8 +14,7 @@ library(ComplexHeatmap)
 library(dplyr)
 library(GSBenchMark)
 library(GSReg)
-setwd("/Users/emilydavis/phd/rotations/fertig/hnscc")
-print("libraries and setwd done")
+
 ###################################################
 ### code chunk 2: load data
 ###################################################

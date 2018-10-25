@@ -11,7 +11,6 @@ library(reshape2)
 library(GSBenchMark)
 library(GSReg)
 library(philentropy)
-setwd("/Users/emilydavis/Desktop/alldist")
 
 ################################################# 
 ### code chunk: load data

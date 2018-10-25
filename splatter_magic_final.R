@@ -13,7 +13,7 @@ library(GSReg)
 library(reshape2)
 library(viridis)
 library(GSBenchMark)
-setwd("/Users/emilydavis/Desktop/simulations")
+
 # load pathways
 load("hallmark_pathways.rda")
 # load list of genes

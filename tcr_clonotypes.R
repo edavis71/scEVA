@@ -11,7 +11,6 @@ library(tcrSeqR)
 library(reshape2)
 library(ggplot2)
 library(viridis)
-setwd("/Users/emilydavis/Desktop/breast_cancer/GSE114724_RAW")
 
 ###################################################
 ### code chunk 1: prep files

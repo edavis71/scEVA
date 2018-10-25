@@ -1,0 +1,94 @@
+---
+title: "hnscc tcga classifier"
+output: html_document
+---
+
+```{r setwd}
+setwd("/Users/emilydavis/phd/rotations/fertig/hnscc")
+
+```
+
+```{r classifier}
+
+### get the list of genes from UNC
+uncClassifierGenes <- read.table('unc_hnscc_classifier.txt',header=T,sep="\t",row.names=1)
+
+#subset for cancer cells
+cancer <- cds[,(pData(cds)$cell_type=="Cancer")]
+exprscancer <- exprs(cancer)
+
+### create probe-level UNC classifiers
+
+uncClassifierGenes <- uncClassifierGenes[intersect(row.names(uncClassifierGenes),row.names(exprscancer)),]
+
+#scRNAExprsDat[,colnames(scRNAExprsDat) %in% row.names(pData(malignant_dat))] 
+
+#row.names(uncClassifierGenes) <- cds[row.names(uncClassifierGenes)]
+
+uncClassifier <- function(input.matrix, classifier.matrix=uncClassifierGenes) {
+	input.matrix <- input.matrix[row.names(uncClassifierGenes),]
+	input.matrix <- sweep(input.matrix,1,apply(input.matrix,1,median))
+	class.vec=rep(NA,ncol(input.matrix))
+	for (i in 1:ncol(input.matrix)) {
+		temp.dist.vec <- 1-cor(input.matrix[,i],classifier.matrix)
+		class.vec[i] <- colnames(classifier.matrix)[which.min(temp.dist.vec)]
+	}
+	return(class.vec)
+}
+
+### classify samples via UNC classifier
+hnscc.unc <- uncClassifier(exprscancer)
+
+pData(cancer)$tcga <- hnscc.unc
+
+pheno <- pData(cancer)
+write.csv(pheno, file ="pdata_cancer_tcga.csv",quote=F,row.names=TRUE,col.names=TRUE)
+
+stat <- table(pData(cancer)$patient,pData(cancer)$myCell_Type,pData(cancer)$tcga)
+write.csv(stat, file ="tcga_celltype_hnscc.csv",quote=F,row.names=TRUE,col.names=TRUE)
+
+```
+
+```{r classifier for magic_cancer}
+#object name cancer
+load(file = "magic_cancer.rda")
+
+### get the list of genes from UNC
+uncClassifierGenes <- read.table('unc_hnscc_classifier.txt',header=T,sep="\t",row.names=1)
+
+#subset for cancer cells
+cancerexprs <- exprs(cancer)
+
+### create probe-level UNC classifiers
+
+uncClassifierGenes <- uncClassifierGenes[intersect(row.names(uncClassifierGenes),row.names(cancerexprs)),]
+
+#scRNAExprsDat[,colnames(scRNAExprsDat) %in% row.names(pData(malignant_dat))] 
+
+#row.names(uncClassifierGenes) <- cds[row.names(uncClassifierGenes)]
+
+uncClassifier <- function(input.matrix, classifier.matrix=uncClassifierGenes) {
+	input.matrix <- input.matrix[row.names(uncClassifierGenes),]
+	input.matrix <- sweep(input.matrix,1,apply(input.matrix,1,median))
+	class.vec=rep(NA,ncol(input.matrix))
+	for (i in 1:ncol(input.matrix)) {
+		temp.dist.vec <- 1-cor(input.matrix[,i],classifier.matrix)
+		class.vec[i] <- colnames(classifier.matrix)[which.min(temp.dist.vec)]
+	}
+	return(class.vec)
+}
+
+### classify samples via UNC classifier
+hnscc.unc <- uncClassifier(cancerexprs)
+
+pData(cancer)$magic_tcga <- hnscc.unc
+
+save(cancer, file = "magic_cancer_tcga.rda")
+
+#pheno <- pData(cancer)
+#write.csv(pheno, file ="pdata_cancer_tcga.csv",quote=F,row.names=TRUE,col.names=TRUE)
+
+#stat <- table(pData(cancer)$patient,pData(cancer)$myCell_Type,pData(cancer)$tcga)
+#write.csv(stat, file ="tcga_celltype_hnscc.csv",quote=F,row.names=TRUE,col.names=TRUE)
+
+```

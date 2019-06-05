@@ -13,6 +13,7 @@ library(dplyr)
 library(magrittr)
 library(ggrepel)
 library(Rtsne)
+library(reshape2)
 
 ###################################################
 ### code chunk: overview fig matrix
@@ -32,7 +33,7 @@ scalevar <- apply(jitv,2,scale)
 meltvar <- melt(scalevar)
 
 var <- ggplot(meltvar, aes(Var2,Var1)) + geom_tile(aes(fill = (value)), colour = "white") + 
-  scale_fill_gradient2(low = "steelblue3", mid = "khaki1", high = "red1") +
+  scale_fill_gradient2(low = "steelblue3", mid = "white", high = "red1") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank(),
         axis.text.y=element_blank(),
@@ -40,7 +41,7 @@ var <- ggplot(meltvar, aes(Var2,Var1)) + geom_tile(aes(fill = (value)), colour =
   theme(legend.position="none") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank()) +
-  ggtitle("variable") +labs(x = "cells", y = "pathway genes")
+  ggtitle("variable") +labs(x = "cells", y = "pathway genes") 
 
 # data with little variation 
 jitc <- reps + matrix(rnorm(nrow(reps) * ncol(reps), sd = 0.25), ncol = ncol(reps))
@@ -49,7 +50,7 @@ meltc <- melt(scalec)
 
 const <- ggplot(meltc, aes(Var2,Var1)) +
   geom_tile(aes(fill = (value)), colour = "white") + 
-  scale_fill_gradient2(low = "steelblue3", mid = "khaki1", high = "red1") +
+  scale_fill_gradient2(low = "steelblue3", mid = "white", high = "red1") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank(),
         axis.text.y=element_blank(),
@@ -70,10 +71,10 @@ mat <- mat[,-c(1:5)]
 scaled <- apply(mat,2,scale)
 meltd <- melt(scaled)
 
-pdf("overview_fig_all_matrix.pdf",width=15,height=10, paper = "USr")
+svg("overview_fig_all_matrix.svg")
 ggplot(meltd, aes(Var2,Var1)) +
   geom_tile(aes(fill = (value)), colour = "white") + 
-  scale_fill_gradient2(low = "steelblue3", mid = "khaki1", high = "red1") +
+  scale_fill_gradient2(low = "steelblue3", mid = "white", high = "red1") +
   theme(axis.text.x=element_blank(),
         axis.ticks.x=element_blank(),
         axis.text.y=element_blank(),
@@ -132,7 +133,7 @@ phenotype <- c("1", "2")
 estat <- c(0.10, 0.22)
 df <- data.frame(phenotype, estat)
 
-pdf("overview_fig_bar.pdf",width=5,height=5)
+svg("overview_fig_bar.svg",width=5,height=5)
 ggplot(data = df, aes(x=phenotype, y=estat, fill=phenotype)) +
   geom_bar(stat="identity") + theme_bw() +
   scale_fill_manual(values =c("blue", "red")) +
